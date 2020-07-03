@@ -54,10 +54,10 @@ const calculateDegreeChange = async () => {
   const degrees = await getLastDegrees();
   for (let obj of degrees) {
     if (obj.temp > degrees[0].temp) {
-      return "sinking";
+      return `${degrees[0].temp} grader, sjunkande`;
     }
   }
-  return "rising";
+  return `${degrees[0].temp} grader, stigande`;
 };
 
 app.get("/", async (req, res) => {
