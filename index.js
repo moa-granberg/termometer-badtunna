@@ -50,19 +50,30 @@ const getLastDegrees = async () => {
   }
 };
 
+const roundTemperature = (temp) => Math.round(temp * 100) / 100;
+
 const calculateDegreeChange = async () => {
   const degrees = await getLastDegrees();
+  const currentTemperature = degrees[0].temp;
 
-  if (degrees.every((obj) => obj.temp === degrees[0].temp)) {
-    return `Temp oföränderligt ${degrees[0].temp}°C, något kan vara fel`;
+  if (degrees.every((obj) => obj.temp === currentTemperature)) {
+    return `Temp oföränderligt ${roundTemperature(
+      currentTemperature
+    )}°C, något kan vara fel`;
   }
+
+  const speed = roundTemperature(
+    Math.abs(currentTemperature - degrees[4].temp) * 12
+  );
 
   for (let obj of degrees) {
-    if (obj.temp > degrees[0].temp) {
-      return `${degrees[0].temp}°C, sjunkande`;
+    if (obj.temp > currentTemperature) {
+      return `${roundTemperature(
+        currentTemperature
+      )}°C, sjunker i ${speed}°C/h`;
     }
   }
-  return `${degrees[0].temp}°C, stigande`;
+  return `${roundTemperature(currentTemperature)}°C, stiger i ${speed}°C/h`;
 };
 
 app.get("/", async (req, res) => {
