@@ -52,12 +52,17 @@ const getLastDegrees = async () => {
 
 const calculateDegreeChange = async () => {
   const degrees = await getLastDegrees();
+
+  if (degrees.every((obj) => obj.temp === degrees[0].temp)) {
+    return `Temp oföränderligt ${degrees[0].temp}°C, något kan vara fel`;
+  }
+
   for (let obj of degrees) {
     if (obj.temp > degrees[0].temp) {
-      return `${degrees[0].temp} grader, sjunkande`;
+      return `${degrees[0].temp}°C, sjunkande`;
     }
   }
-  return `${degrees[0].temp} grader, stigande`;
+  return `${degrees[0].temp}°C, stigande`;
 };
 
 app.get("/", async (req, res) => {
